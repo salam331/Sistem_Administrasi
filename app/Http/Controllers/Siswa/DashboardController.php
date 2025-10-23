@@ -11,13 +11,16 @@ class DashboardController extends Controller
     public function index()
     {
         // 1. Ambil data siswa yang sedang login
-        // 'user' adalah relasi dari model User ke Siswa (yang akan kita buat)
         $user = Auth::user();
+        $siswa = $user->siswa;
 
-        // Nanti kita akan tambahkan data lain seperti:
-        // $jumlah_tagihan = $user->siswa->tagihans()->where('status', 'Belum Lunas')->count();
-        // $jadwal_hari_ini = ...
+        // 2. Ambil data wali kelas
+        $waliKelas = $siswa->kelas->waliKelas ?? null;
 
-        return view('siswa.dashboard'); // 2. Tampilkan view 'siswa/dashboard.blade.php'
+        // 3. Hitung jumlah tagihan belum lunas
+        $jumlahTagihanBelumLunas = $siswa->tagihans()->where('status', 'Belum Lunas')->count();
+
+        // 4. Kirim data ke view
+        return view('siswa.dashboard', compact('user', 'siswa', 'waliKelas', 'jumlahTagihanBelumLunas'));
     }
 }

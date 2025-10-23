@@ -32,10 +32,9 @@
     </style>
 </head>
 
-<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors">
+<body class="bg-blue-50 dark:bg-slate-900 text-blue-900 dark:text-white transition-colors">
 
     {{-- === HEADER & SIDEBAR === --}}
-    @include('layouts.navigation')
     @if (Auth::user()->hasRole('admin'))
         @include('layouts.navigation') {{-- Sidebar Admin --}}
     @elseif (Auth::user()->hasRole('siswa'))

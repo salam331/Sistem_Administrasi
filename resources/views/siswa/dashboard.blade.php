@@ -22,25 +22,39 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                <a href="#"
+                <a href="{{ route('siswa.jadwal.index') }}"
                     class="bg-blue-100 dark:bg-blue-900/50 overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-blue-200 dark:hover:bg-blue-900 transition ease-in-out duration-150">
                     <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100">Jadwal Pelajaran</h3>
                     <p class="mt-2 text-sm text-blue-700 dark:text-blue-300">Lihat jadwal pelajaran mingguan Anda.</p>
                 </a>
 
-                <a href="#"
-                    class="bg-green-100 dark:bg-green-900/50 overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-green-200 dark:hover:bg-green-900 transition ease-in-out duration-150">
-                    <h3 class="text-lg font-semibold text-green-900 dark:text-green-100">Nilai & Raport</h3>
-                    <p class="mt-2 text-sm text-green-700 dark:text-green-300">Lihat riwayat nilai dan unduh raport
-                        Anda.</p>
-                </a>
+                <div class="bg-purple-100 dark:bg-purple-900/50 overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-purple-900 dark:text-purple-100">Wali Kelas</h3>
+                    <p class="mt-2 text-sm text-purple-700 dark:text-purple-300">
+                        @if($waliKelas)
+                            {{ $waliKelas->user->name }}
+                        @else
+                            Belum ditentukan
+                        @endif
+                    </p>
+                </div>
 
-                <a href="{{ route('siswa.tagihan.index') }}" class="bg-yellow-100 ...">
-                    <h3 class...>Tagihan Saya</h3>
-                    <p class...>Cek status pembayaran SPP...</p>
-                </a>
+                <div class="bg-yellow-100 dark:bg-yellow-900/50 overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-yellow-900 dark:text-yellow-100">Status Tagihan</h3>
+                    <p class="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
+                        Anda memiliki {{ $jumlahTagihanBelumLunas }} tagihan belum lunas.
+                    </p>
+                </div>
+
+                <div class="bg-green-100 dark:bg-green-900/50 overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-green-900 dark:text-green-100">Informasi Pribadi</h3>
+                    <p class="mt-2 text-sm text-green-700 dark:text-green-300">
+                        NIS: {{ $siswa->nis }}<br>
+                        Alamat: {{ $siswa->alamat ?? 'Belum diisi' }}
+                    </p>
+                </div>
 
             </div>
         </div>

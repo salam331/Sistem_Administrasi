@@ -21,6 +21,7 @@ use App\Http\Controllers\Siswa\TagihanController as SiswaTagihanController;
 
 // Controller untuk Siswa
 use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
+use App\Http\Controllers\Siswa\JadwalController as SiswaJadwalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,7 @@ Route::middleware(['auth'])->group(function () {
 
         // CRUD Data Pengguna
         Route::resource('users', UserController::class);
+        Route::get('users/role/{role}', [UserController::class, 'showRole'])->name('users.role');
 
         // CRUD Guru, Siswa, Kelas, Mapel
         Route::resource('guru', GuruController::class);
@@ -59,7 +61,10 @@ Route::middleware(['auth'])->group(function () {
 
         // Jadwal, Presensi, Nilai
         Route::resource('jadwal', JadwalController::class);
-        Route::resource('presensi', PresensiController::class);
+        Route::get('presensi/show', [PresensiController::class, 'show'])->name('presensi.show');
+        Route::get('presensi/edit', [PresensiController::class, 'edit'])->name('presensi.edit');
+        Route::put('presensi/update', [PresensiController::class, 'update'])->name('presensi.update');
+        Route::resource('presensi', PresensiController::class)->except(['show', 'edit', 'update']);
         Route::resource('nilai', NilaiController::class);
 
         // Raport
@@ -92,6 +97,9 @@ Route::middleware(['auth'])->group(function () {
 
         // === ke tagihan siswa ===
         Route::get('/tagihan', [SiswaTagihanController::class, 'index'])->name('tagihan.index');
+
+        // === ke jadwal siswa ===
+        Route::get('/jadwal', [SiswaJadwalController::class, 'index'])->name('jadwal.index');
     });
 
     // === ROUTE PROFILE (bawaan Breeze) ===

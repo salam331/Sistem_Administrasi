@@ -28,7 +28,7 @@
 
         <h3 class="px-4 pt-4 pb-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Akademik</h3>
 
-        <a href="#" class="{{ $linkClasses }}">
+        <a href="{{ route('siswa.jadwal.index') }}" class="{{ request()->routeIs('siswa.jadwal.*') ? $activeClasses : $linkClasses }}">
             <span class="ms-2">Jadwal Pelajaran</span>
         </a>
         <a href="#" class="{{ $linkClasses }}">
