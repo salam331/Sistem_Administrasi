@@ -35,9 +35,8 @@
 <body class="bg-blue-50 dark:bg-slate-900 text-blue-900 dark:text-white transition-colors">
 
     {{-- === HEADER & SIDEBAR === --}}
-    @include('layouts.navigation')
     @if (Auth::user()->hasRole('admin'))
-        {{-- Sidebar Admin sudah di-include di atas --}}
+        @include('layouts.navigation') {{-- Sidebar Admin --}}
     @elseif (Auth::user()->hasRole('siswa'))
         @include('layouts.siswa-navigation') {{-- Sidebar Siswa --}}
     @elseif (Auth::user()->hasRole('guru'))
