@@ -39,9 +39,7 @@
         </a>
 
         <h3 class="px-4 pt-4 pb-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Administrasi</h3>
-        <a href="{{ route('siswa.tagihan.index') }}"
-            class="{{ request()->routeIs('siswa.tagihan.*') ? $activeClasses : $linkClasses }}">
-            <span class="ms-2">Tagihan Saya</span>
+        {{-- Link Tagihan Saya dihapus sesuai permintaan --}}
 
     </div>
 </nav>
