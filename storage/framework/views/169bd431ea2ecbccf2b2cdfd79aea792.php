@@ -33,24 +33,39 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                <a href="#"
+                <a href="<?php echo e(route('siswa.jadwal.index')); ?>"
                     class="bg-blue-100 dark:bg-blue-900/50 overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-blue-200 dark:hover:bg-blue-900 transition ease-in-out duration-150">
                     <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100">Jadwal Pelajaran</h3>
                     <p class="mt-2 text-sm text-blue-700 dark:text-blue-300">Lihat jadwal pelajaran mingguan Anda.</p>
                 </a>
 
-                <a href="#"
+                <a href="<?php echo e(route('siswa.presensi.index')); ?>"
                     class="bg-green-100 dark:bg-green-900/50 overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-green-200 dark:hover:bg-green-900 transition ease-in-out duration-150">
-                    <h3 class="text-lg font-semibold text-green-900 dark:text-green-100">Nilai & Raport</h3>
-                    <p class="mt-2 text-sm text-green-700 dark:text-green-300">Lihat riwayat nilai dan unduh raport
-                        Anda.</p>
+                    <h3 class="text-lg font-semibold text-green-900 dark:text-green-100">Presensi Saya</h3>
+                    <p class="mt-2 text-sm text-green-700 dark:text-green-300">Lihat riwayat presensi Anda.</p>
                 </a>
 
-                <a href="<?php echo e(route('siswa.tagihan.index')); ?>" class="bg-yellow-100 ...">
-                    <h3 class...>Tagihan Saya</h3>
-                    <p class...>Cek status pembayaran SPP...</p>
+                <a href="<?php echo e(route('siswa.wali-kelas.show')); ?>"
+                    class="bg-purple-100 dark:bg-purple-900/50 overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-purple-200 dark:hover:bg-purple-900 transition ease-in-out duration-150">
+                    <h3 class="text-lg font-semibold text-purple-900 dark:text-purple-100">Wali Kelas</h3>
+                    <p class="mt-2 text-sm text-purple-700 dark:text-purple-300">
+                        <?php if($waliKelas): ?>
+                            <?php echo e($waliKelas->user->name); ?>
+
+                        <?php else: ?>
+                            Belum ditentukan
+                        <?php endif; ?>
+                    </p>
+                </a>
+
+                <a href="<?php echo e(route('siswa.tagihan.index')); ?>"
+                    class="bg-yellow-100 dark:bg-yellow-900/50 overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-yellow-200 dark:hover:bg-yellow-900 transition ease-in-out duration-150">
+                    <h3 class="text-lg font-semibold text-yellow-900 dark:text-yellow-100">Status Tagihan</h3>
+                    <p class="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
+                        Anda memiliki <?php echo e($jumlahTagihanBelumLunas); ?> tagihan belum lunas.
+                    </p>
                 </a>
 
             </div>
@@ -65,4 +80,5 @@
 <?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?><?php /**PATH D:\laragon\www\sistem_administrasi\resources\views/siswa/dashboard.blade.php ENDPATH**/ ?>
+<?php endif; ?>
+<?php /**PATH D:\laragon\www\sistem_administrasi\resources\views/siswa/dashboard.blade.php ENDPATH**/ ?>

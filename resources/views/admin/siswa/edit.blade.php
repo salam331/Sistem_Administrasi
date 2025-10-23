@@ -70,6 +70,20 @@
                                 <x-input-error :messages="$errors->get('status')" class="mt-2" />
                             </div>
 
+                            <div class="mb-4 md:col-span-2">
+                                <x-input-label for="kelas_id" :value="__('Kelas')" />
+                                <select id="kelas_id" name="kelas_id"
+                                    class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                    <option value="">Pilih Kelas (Opsional)</option>
+                                    @foreach($kelas as $k)
+                                        <option value="{{ $k->id }}" {{ old('kelas_id', $siswa->kelas_id) == $k->id ? 'selected' : '' }}>
+                                            {{ $k->nama_kelas }} (Tingkat {{ $k->tingkat }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <x-input-error :messages="$errors->get('kelas_id')" class="mt-2" />
+                            </div>
+
                         </div>
 
                         <div class="flex items-center justify-end mt-6 gap-4">

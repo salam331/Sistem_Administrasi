@@ -29,7 +29,8 @@ class SiswaController extends Controller
      */
     public function create()
     {
-        return view('admin.siswa.create');
+        $kelas = \App\Models\Kelas::all();
+        return view('admin.siswa.create', compact('kelas'));
     }
 
     /**
@@ -46,6 +47,7 @@ class SiswaController extends Controller
             'alamat' => 'nullable|string',
             'nama_wali' => 'nullable|string|max:255',
             'status' => 'required|in:Aktif,Lulus,Keluar,Pindah',
+            'kelas_id' => 'nullable|exists:kelas,id',
         ]);
 
         // 2. Cari Role 'siswa'
@@ -70,6 +72,7 @@ class SiswaController extends Controller
             'alamat' => $request->alamat,
             'nama_wali' => $request->nama_wali,
             'status' => $request->status,
+            'kelas_id' => $request->kelas_id,
         ]);
 
         // 6. Redirect ke halaman index siswa
@@ -94,8 +97,9 @@ class SiswaController extends Controller
     {
         // Load relasi user
         $siswa->load('user');
+        $kelas = \App\Models\Kelas::all();
 
-        return view('admin.siswa.edit', compact('siswa'));
+        return view('admin.siswa.edit', compact('siswa', 'kelas'));
     }
 
     /**
@@ -111,6 +115,7 @@ class SiswaController extends Controller
             'alamat' => 'nullable|string',
             'nama_wali' => 'nullable|string|max:255',
             'status' => 'required|in:Aktif,Lulus,Keluar,Pindah',
+            'kelas_id' => 'nullable|exists:kelas,id',
         ]);
 
         // 2. Update data User
@@ -125,6 +130,7 @@ class SiswaController extends Controller
             'alamat' => $request->alamat,
             'nama_wali' => $request->nama_wali,
             'status' => $request->status,
+            'kelas_id' => $request->kelas_id,
         ]);
 
         // 4. Redirect

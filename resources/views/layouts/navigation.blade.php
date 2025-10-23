@@ -1,9 +1,9 @@
 {{-- resources/views/layouts/navigation.blade.php --}}
 <nav x-data="{ sidebarOpen: false, darkMode: false }" x-init="darkMode = localStorage.getItem('theme') === 'dark'; 
-             if (darkMode) document.documentElement.classList.add('dark');" @toggle-theme.window="darkMode = !darkMode; 
+             @toggle-theme.window="darkMode = !darkMode;
                            localStorage.setItem('theme', darkMode ? 'dark' : 'light');
                            document.documentElement.classList.toggle('dark', darkMode)"
-    class="fixed top-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 shadow">
+    class="fixed top-0 left-0 right-0 z-40 bg-blue-100 dark:bg-gray-800 border-b border-blue-200 dark:border-gray-700 shadow">
 
     {{-- === NAVBAR TOP === --}}
     <div class="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
@@ -29,7 +29,7 @@
         {{-- Tombol Dark Mode + Profil --}}
         <div class="flex items-center space-x-4">
             {{-- Toggle Dark Mode --}}
-            <button @click="$dispatch('toggle-theme')"
+            <button @click="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', darkMode)"
                 class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition">
                 <template x-if="!darkMode">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none"
@@ -92,11 +92,11 @@
 <div x-show="sidebarOpen" class="fixed inset-0 z-30 bg-black bg-opacity-50 md:hidden" @click="sidebarOpen = false"
     x-cloak></div>
 
-<nav class="fixed inset-y-0 left-0 z-40 flex flex-col w-64 bg-gray-800 text-white transform transition-transform duration-300
+<nav class="fixed inset-y-0 left-0 z-40 flex flex-col w-64 bg-slate-800 text-white transform transition-transform duration-300
            -translate-x-full md:translate-x-0 shadow-lg" :class="{ 'translate-x-0': sidebarOpen }" x-cloak>
 
     {{-- Header Sidebar --}}
-    <div class="flex items-center justify-center h-16 bg-gray-900 shadow-md">
+    <div class="flex items-center justify-center h-16 bg-slate-900 shadow-md">
         <a href="{{ route('dashboard') }}" class="flex items-center space-x-2">
             <x-application-logo class="block h-8 w-auto fill-current text-white" />
             <span class="font-semibold text-white">SMAN 1 Donggo</span>
@@ -106,8 +106,8 @@
     {{-- Menu --}}
     <div class="flex-1 overflow-y-auto mt-4 space-y-1 pb-6">
         @php
-            $linkClasses = "flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md mx-2 transition";
-            $activeClasses = "flex items-center px-4 py-2 bg-gray-900 text-white rounded-md mx-2";
+            $linkClasses = "flex items-center px-4 py-2 text-slate-300 hover:bg-slate-700 hover:text-white rounded-md mx-2 transition";
+            $activeClasses = "flex items-center px-4 py-2 bg-slate-900 text-white rounded-md mx-2";
         @endphp
 
         <a href="{{ route('dashboard') }}"
@@ -170,5 +170,7 @@
             class="{{ request()->routeIs('admin.pembayaran.*') ? $activeClasses : $linkClasses }}">
             <span class="ms-2">Input Pembayaran</span>
         </a>
+
+
     </div>
 </nav>

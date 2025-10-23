@@ -1,12 +1,10 @@
-<div x-show="sidebarOpen" class="fixed inset-0 z-20 bg-black bg-opacity-50 transition-opacity md:hidden"
-    @click="sidebarOpen = false" style="display: none;"></div>
 
-<nav class="fixed inset-y-0 left-0 z-30 flex flex-col w-64 bg-gray-800 text-white transition-transform duration-300 transform 
-           -translate-x-full md:translate-x-0" :class="{ 'translate-x-0': sidebarOpen }" x-show="sidebarOpen"
-    @click.outside="sidebarOpen = false" x-transition:enter="transition ease-out duration-200"
-    x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
-    x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0"
-    x-transition:leave-end="-translate-x-full" style="display: none;">
+
+<div x-show="sidebarOpen" class="fixed inset-0 z-30 bg-black bg-opacity-50 md:hidden" @click="sidebarOpen = false"
+    x-cloak></div>
+
+<nav class="fixed inset-y-0 left-0 z-40 flex flex-col w-64 bg-gray-800 text-white transform transition-transform duration-300
+           -translate-x-full md:translate-x-0 shadow-lg" :class="{ 'translate-x-0': sidebarOpen }" x-cloak>
 
     <div class="flex items-center justify-center h-16 flex-shrink-0 shadow-md bg-gray-900">
         <a href="<?php echo e(route('siswa.dashboard')); ?>">
@@ -47,20 +45,21 @@
 
         <h3 class="px-4 pt-4 pb-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Akademik</h3>
 
-        <a href="#" class="<?php echo e($linkClasses); ?>">
+        <a href="<?php echo e(route('siswa.jadwal.index')); ?>" class="<?php echo e(request()->routeIs('siswa.jadwal.*') ? $activeClasses : $linkClasses); ?>">
             <span class="ms-2">Jadwal Pelajaran</span>
         </a>
-        <a href="#" class="<?php echo e($linkClasses); ?>">
+        <a href="<?php echo e(route('siswa.presensi.index')); ?>" class="<?php echo e(request()->routeIs('siswa.presensi.*') ? $activeClasses : $linkClasses); ?>">
             <span class="ms-2">Presensi Saya</span>
         </a>
-        <a href="#" class="<?php echo e($linkClasses); ?>">
-            <span class="ms-2">Nilai & Raport</span>
+        <a href="<?php echo e(route('siswa.wali-kelas.show')); ?>" class="<?php echo e(request()->routeIs('siswa.wali-kelas.*') ? $activeClasses : $linkClasses); ?>">
+            <span class="ms-2">Wali Kelas</span>
         </a>
 
         <h3 class="px-4 pt-4 pb-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Administrasi</h3>
-        <a href="<?php echo e(route('siswa.tagihan.index')); ?>"
-            class="<?php echo e(request()->routeIs('siswa.tagihan.*') ? $activeClasses : $linkClasses); ?>">
+        <a href="<?php echo e(route('siswa.tagihan.index')); ?>" class="<?php echo e(request()->routeIs('siswa.tagihan.*') ? $activeClasses : $linkClasses); ?>">
             <span class="ms-2">Tagihan Saya</span>
+        </a>
 
     </div>
-</nav><?php /**PATH D:\laragon\www\sistem_administrasi\resources\views/layouts/siswa-navigation.blade.php ENDPATH**/ ?>
+</nav>
+<?php /**PATH D:\laragon\www\sistem_administrasi\resources\views/layouts/siswa-sidebar.blade.php ENDPATH**/ ?>

@@ -26,4 +26,21 @@ class TagihanController extends Controller
         // 3. Tampilkan view dan kirim data tagihan
         return view('siswa.tagihan.index', compact('tagihans'));
     }
+
+    /**
+     * Menampilkan detail tagihan dan riwayat pembayaran.
+     */
+    public function show(Tagihan $tagihan)
+    {
+        // 1. Pastikan tagihan milik siswa yang sedang login
+        if ($tagihan->siswa_id !== Auth::user()->siswa->id) {
+            abort(403, 'Unauthorized');
+        }
+
+        // 2. Load relasi pembayarans
+        $tagihan->load('pembayarans');
+
+        // 3. Tampilkan view detail tagihan
+        return view('siswa.tagihan.show', compact('tagihan'));
+    }
 }

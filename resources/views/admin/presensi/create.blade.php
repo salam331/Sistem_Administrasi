@@ -3,7 +3,11 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Input Presensi Kelas: ') }} {{ $kelas->nama_kelas }}
         </h2>
+        <p class="text-sm text-gray-500">Mata Pelajaran: {{ $jadwal->mapel->nama_mapel }}</p>
         <p class="text-sm text-gray-500">Tanggal: {{ \Carbon\Carbon::parse($tanggal)->isoFormat('dddd, D MMMM Y') }}</p>
+        @if($kelas->waliKelas)
+            <p class="text-sm text-gray-500">Wali Kelas: {{ $kelas->waliKelas->user->name }}</p>
+        @endif
     </x-slot>
 
     <div class="py-12">
@@ -12,6 +16,7 @@
                 <form method="POST" action="{{ route('admin.presensi.store') }}">
                     @csrf
                     <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
+                    <input type="hidden" name="mapel_id" value="{{ $jadwal->mapel->id }}">
                     <input type="hidden" name="tanggal" value="{{ $tanggal }}">
 
                     <div class="p-6 text-gray-900">

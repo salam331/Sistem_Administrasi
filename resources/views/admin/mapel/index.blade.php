@@ -44,8 +44,13 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $mapel->nama_mapel }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $mapel->alokasi_jam }} jam</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Atur Guru Pengampu</a>
-                                            <a href="#" class="text-red-600 hover:text-red-900 ml-4">Hapus</a>
+                                            <a href="{{ route('admin.mapel.edit', $mapel) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                            <form method="POST" action="{{ route('admin.mapel.destroy', $mapel) }}" class="inline ml-4"
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus mata pelajaran ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @empty

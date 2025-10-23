@@ -73,8 +73,13 @@
                                         <td class="px-6 py-4 whitespace-nowrap"><?php echo e($jadwal->guru->user->name); ?></td>
 
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                            <a href="#" class="text-red-600 hover:text-red-900 ml-4">Hapus</a>
+                                            <a href="<?php echo e(route('admin.jadwal.edit', $jadwal)); ?>" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                            <form method="POST" action="<?php echo e(route('admin.jadwal.destroy', $jadwal)); ?>" class="inline ml-4"
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus entri jadwal ini?')">
+                                                <?php echo csrf_field(); ?>
+                                                <?php echo method_field('DELETE'); ?>
+                                                <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

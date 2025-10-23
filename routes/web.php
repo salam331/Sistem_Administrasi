@@ -22,6 +22,8 @@ use App\Http\Controllers\Siswa\TagihanController as SiswaTagihanController;
 // Controller untuk Siswa
 use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
 use App\Http\Controllers\Siswa\JadwalController as SiswaJadwalController;
+use App\Http\Controllers\Siswa\PresensiController as SiswaPresensiController;
+use App\Http\Controllers\Siswa\WaliKelasController as SiswaWaliKelasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +63,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Jadwal, Presensi, Nilai
         Route::resource('jadwal', JadwalController::class);
+        Route::get('presensi/get-mapel/{kelasId}', [PresensiController::class, 'getMapel'])->name('presensi.get-mapel');
         Route::get('presensi/show', [PresensiController::class, 'show'])->name('presensi.show');
         Route::get('presensi/edit', [PresensiController::class, 'edit'])->name('presensi.edit');
         Route::put('presensi/update', [PresensiController::class, 'update'])->name('presensi.update');
@@ -97,9 +100,16 @@ Route::middleware(['auth'])->group(function () {
 
         // === ke tagihan siswa ===
         Route::get('/tagihan', [SiswaTagihanController::class, 'index'])->name('tagihan.index');
+        Route::get('/tagihan/{tagihan}', [SiswaTagihanController::class, 'show'])->name('tagihan.show');
 
         // === ke jadwal siswa ===
         Route::get('/jadwal', [SiswaJadwalController::class, 'index'])->name('jadwal.index');
+
+        // === ke presensi siswa ===
+        Route::get('/presensi', [SiswaPresensiController::class, 'index'])->name('presensi.index');
+
+        // === ke wali kelas siswa ===
+        Route::get('/wali-kelas', [SiswaWaliKelasController::class, 'show'])->name('wali-kelas.show');
     });
 
     // === ROUTE PROFILE (bawaan Breeze) ===

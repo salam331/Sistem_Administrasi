@@ -35,10 +35,11 @@
 <body class="bg-blue-50 dark:bg-slate-900 text-blue-900 dark:text-white transition-colors">
 
     {{-- === HEADER & SIDEBAR === --}}
+    @include('layouts.top-navbar')
     @if (Auth::user()->hasRole('admin'))
-        @include('layouts.navigation') {{-- Sidebar Admin --}}
+        @include('layouts.admin-sidebar') {{-- Sidebar Admin --}}
     @elseif (Auth::user()->hasRole('siswa'))
-        @include('layouts.siswa-navigation') {{-- Sidebar Siswa --}}
+        @include('layouts.siswa-sidebar') {{-- Sidebar Siswa --}}
     @elseif (Auth::user()->hasRole('guru'))
         {{-- @include('layouts.guru-navigation') --}} {{-- Nanti --}}
     @endif

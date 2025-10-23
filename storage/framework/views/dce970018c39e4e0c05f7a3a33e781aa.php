@@ -1,3 +1,4 @@
+<!-- resources/views/admin/presensi/edit.blade.php -->
 <?php if (isset($component)) { $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54 = $attributes; } ?>
 <?php $component = App\View\Components\AppLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -10,22 +11,25 @@
 <?php $component->withAttributes([]); ?>
      <?php $__env->slot('header', null, []); ?> 
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            <?php echo e(__('Input Nilai: ')); ?> <?php echo e($mapel->nama_mapel); ?>
+            <?php echo e(__('Edit Presensi Kelas: ')); ?> <?php echo e($kelas->nama_kelas); ?>
 
         </h2>
-        <p class="text-sm text-gray-500">
-            Kelas: <?php echo e($kelas->nama_kelas); ?> | Jenis Nilai: <?php echo e($jenisNilai); ?>
-
-        </p>
+        <p class="text-sm text-gray-500">Mata Pelajaran: <?php echo e($jadwal->mapel->nama_mapel); ?></p>
+        <p class="text-sm text-gray-500">Tanggal: <?php echo e(\Carbon\Carbon::parse($tanggal)->isoFormat('dddd, D MMMM Y')); ?></p>
+        <?php if($kelas->waliKelas): ?>
+            <p class="text-sm text-gray-500">Wali Kelas: <?php echo e($kelas->waliKelas->user->name); ?></p>
+        <?php endif; ?>
      <?php $__env->endSlot(); ?>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <form method="POST" action="<?php echo e(route('admin.nilai.store')); ?>">
+                <form method="POST" action="<?php echo e(route('admin.presensi.update')); ?>">
                     <?php echo csrf_field(); ?>
-                    <input type="hidden" name="mapel_id" value="<?php echo e($mapel->id); ?>">
-                    <input type="hidden" name="jenis_nilai" value="<?php echo e($jenisNilai); ?>">
+                    <?php echo method_field('PUT'); ?>
+                    <input type="hidden" name="kelas_id" value="<?php echo e($kelas->id); ?>">
+                    <input type="hidden" name="mapel_id" value="<?php echo e($jadwal->mapel->id); ?>">
+                    <input type="hidden" name="tanggal" value="<?php echo e($tanggal); ?>">
 
                     <div class="p-6 text-gray-900">
                         <div class="overflow-x-auto">
@@ -34,40 +38,44 @@
                                     <tr>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama
                                             Siswa</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                                            Input Nilai (0-100)</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">NIS</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
+                                            Status Kehadiran</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <?php $__empty_1 = true; $__currentLoopData = $kelas->siswas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $siswa): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                        <?php
+                                            $presensi = $presensis->get($siswa->id);
+                                            $currentStatus = $presensi ? $presensi->status : 'Hadir';
+                                        ?>
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap"><?php echo e($siswa->user->name); ?></td>
+                                            <td class="px-6 py-4 whitespace-nowrap"><?php echo e($siswa->nis); ?></td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <?php if (isset($component)) { $__componentOriginal18c21970322f9e5c938bc954620c12bb = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal18c21970322f9e5c938bc954620c12bb = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.text-input','data' => ['type' => 'number','name' => 'nilai['.e($siswa->id).']','class' => 'block mt-1 w-full','min' => '0','max' => '100','step' => '0.01','value' => ''.e($nilaiSudahAda[$siswa->id] ?? old('nilai.' . $siswa->id, 0)).'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('text-input'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['type' => 'number','name' => 'nilai['.e($siswa->id).']','class' => 'block mt-1 w-full','min' => '0','max' => '100','step' => '0.01','value' => ''.e($nilaiSudahAda[$siswa->id] ?? old('nilai.' . $siswa->id, 0)).'']); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal18c21970322f9e5c938bc954620c12bb)): ?>
-<?php $attributes = $__attributesOriginal18c21970322f9e5c938bc954620c12bb; ?>
-<?php unset($__attributesOriginal18c21970322f9e5c938bc954620c12bb); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal18c21970322f9e5c938bc954620c12bb)): ?>
-<?php $component = $__componentOriginal18c21970322f9e5c938bc954620c12bb; ?>
-<?php unset($__componentOriginal18c21970322f9e5c938bc954620c12bb); ?>
-<?php endif; ?>
+                                                <div class="flex items-center justify-center space-x-4">
+                                                    <label class="inline-flex items-center">
+                                                        <input type="radio" class="form-radio" name="status[<?php echo e($siswa->id); ?>]" value="Hadir" <?php echo e($currentStatus == 'Hadir' ? 'checked' : ''); ?>>
+                                                        <span class="ml-2">Hadir</span>
+                                                    </label>
+                                                    <label class="inline-flex items-center">
+                                                        <input type="radio" class="form-radio" name="status[<?php echo e($siswa->id); ?>]" value="Izin" <?php echo e($currentStatus == 'Izin' ? 'checked' : ''); ?>>
+                                                        <span class="ml-2">Izin</span>
+                                                    </label>
+                                                    <label class="inline-flex items-center">
+                                                        <input type="radio" class="form-radio" name="status[<?php echo e($siswa->id); ?>]" value="Sakit" <?php echo e($currentStatus == 'Sakit' ? 'checked' : ''); ?>>
+                                                        <span class="ml-2">Sakit</span>
+                                                    </label>
+                                                    <label class="inline-flex items-center">
+                                                        <input type="radio" class="form-radio" name="status[<?php echo e($siswa->id); ?>]" value="Alpha" <?php echo e($currentStatus == 'Alpha' ? 'checked' : ''); ?>>
+                                                        <span class="ml-2">Alpha</span>
+                                                    </label>
+                                                </div>
                                             </td>
                                         </tr>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                         <tr>
-                                            <td colspan="2" class="px-6 py-4 text-center text-gray-500">Tidak ada siswa di
+                                            <td colspan="3" class="px-6 py-4 text-center text-gray-500">Tidak ada siswa di
                                                 kelas ini.</td>
                                         </tr>
                                     <?php endif; ?>
@@ -77,6 +85,11 @@
                     </div>
 
                     <div class="flex items-center justify-end p-6 bg-gray-50 border-t">
+                        <a href="<?php echo e(route('admin.presensi.show', ['kelas_id' => $kelas->id, 'mapel_id' => $jadwal->mapel->id, 'tanggal' => $tanggal])); ?>"
+                            class="inline-flex items-center px-4 py-2 bg-gray-300 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-4">
+                            <?php echo e(__('Batal')); ?>
+
+                        </a>
                         <?php if (isset($component)) { $__componentOriginald411d1792bd6cc877d687758b753742c = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginald411d1792bd6cc877d687758b753742c = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.primary-button','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -87,7 +100,7 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-                            <?php echo e(__('Simpan Nilai')); ?>
+                            <?php echo e(__('Simpan Perubahan')); ?>
 
                          <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -113,4 +126,5 @@
 <?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?><?php /**PATH D:\laragon\www\sistem_administrasi\resources\views/admin/nilai/create.blade.php ENDPATH**/ ?>
+<?php endif; ?>
+<?php /**PATH D:\laragon\www\sistem_administrasi\resources\views/admin/presensi/edit.blade.php ENDPATH**/ ?>

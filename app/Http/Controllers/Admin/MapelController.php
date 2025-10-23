@@ -54,7 +54,7 @@ class MapelController extends Controller
      */
     public function edit(Mapel $mapel)
     {
-        //
+        return view('admin.mapel.edit', compact('mapel'));
     }
 
     /**
@@ -62,7 +62,14 @@ class MapelController extends Controller
      */
     public function update(Request $request, Mapel $mapel)
     {
-        //
+        $request->validate([
+            'nama_mapel' => 'required|string|max:255|unique:mapels,nama_mapel,' . $mapel->id,
+            'alokasi_jam' => 'required|integer|min:1',
+        ]);
+
+        $mapel->update($request->all());
+
+        return redirect()->route('admin.mapel.index')->with('success', 'Mata pelajaran berhasil diperbarui.');
     }
 
     /**
@@ -70,6 +77,8 @@ class MapelController extends Controller
      */
     public function destroy(Mapel $mapel)
     {
-        //
+        $mapel->delete();
+
+        return redirect()->route('admin.mapel.index')->with('success', 'Mata pelajaran berhasil dihapus.');
     }
 }

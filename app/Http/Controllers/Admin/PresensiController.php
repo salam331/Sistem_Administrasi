@@ -21,6 +21,21 @@ class PresensiController extends Controller
     }
 
     /**
+     * Get mata pelajaran berdasarkan kelas_id via AJAX
+     */
+    public function getMapel($kelasId)
+    {
+        $mapels = Jadwal::where('kelas_id', $kelasId)
+            ->with('mapel')
+            ->get()
+            ->pluck('mapel')
+            ->unique('id')
+            ->values();
+
+        return response()->json($mapels);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
@@ -28,19 +43,24 @@ class PresensiController extends Controller
         // Validasi input dari form sebelumnya
         $request->validate([
             'kelas_id' => 'required|exists:kelas,id',
+            'mapel_id' => 'required|exists:mapels,id',
             'tanggal' => 'required|date',
         ]);
 
         $kelasId = $request->input('kelas_id');
+        $mapelId = $request->input('mapel_id');
         $tanggal = $request->input('tanggal');
 
-        // Ambil data kelas dan daftar siswanya
-        $kelas = Kelas::with('siswas.user')->findOrFail($kelasId);
+        // Ambil data kelas, siswa, dan guru wali kelas
+        $kelas = Kelas::with(['siswas.user', 'waliKelas.user'])->findOrFail($kelasId);
 
-        // Nanti bisa ditambahkan pengambilan jadwal spesifik pada hari itu
-        // Untuk sekarang, kita fokus pada absensi harian per kelas
+        // Ambil jadwal berdasarkan kelas dan mapel
+        $jadwal = Jadwal::where('kelas_id', $kelasId)
+            ->where('mapel_id', $mapelId)
+            ->with('mapel', 'guru.user')
+            ->firstOrFail();
 
-        return view('admin.presensi.create', compact('kelas', 'tanggal'));
+        return view('admin.presensi.create', compact('kelas', 'jadwal', 'tanggal'));
     }
 
     /**
@@ -50,12 +70,20 @@ class PresensiController extends Controller
     {
         $request->validate([
             'kelas_id' => 'required|exists:kelas,id',
+            'mapel_id' => 'required|exists:mapels,id',
             'tanggal' => 'required|date',
             'status' => 'required|array', // Pastikan status adalah array
             'status.*' => 'required|in:Hadir,Izin,Sakit,Alpha', // Validasi setiap item di array
         ]);
 
         $tanggal = $request->input('tanggal');
+        $kelasId = $request->input('kelas_id');
+        $mapelId = $request->input('mapel_id');
+
+        // Ambil jadwal_id berdasarkan kelas dan mapel
+        $jadwal = Jadwal::where('kelas_id', $kelasId)
+            ->where('mapel_id', $mapelId)
+            ->firstOrFail();
 
         // Loop melalui setiap status siswa yang dikirim dari form
         foreach ($request->status as $siswaId => $status) {
@@ -65,39 +93,128 @@ class PresensiController extends Controller
                 [
                     'tanggal' => $tanggal,
                     'siswa_id' => $siswaId,
+                    'jadwal_id' => $jadwal->id,
                 ],
                 [
                     'status' => $status,
-                    // 'jadwal_id' bisa ditambahkan di sini jika ada
                 ]
             );
         }
 
-        return redirect()->route('admin.presensi.index')->with('success', 'Data presensi berhasil disimpan.');
+        return redirect()->route('admin.presensi.show', ['kelas_id' => $kelasId, 'mapel_id' => $mapelId, 'tanggal' => $tanggal])
+            ->with('success', 'Data presensi berhasil disimpan.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request)
     {
-        //
+        $request->validate([
+            'kelas_id' => 'required|exists:kelas,id',
+            'mapel_id' => 'required|exists:mapels,id',
+            'tanggal' => 'required|date',
+        ]);
+
+        $kelasId = $request->input('kelas_id');
+        $mapelId = $request->input('mapel_id');
+        $tanggal = $request->input('tanggal');
+
+        $kelas = Kelas::with(['siswas.user', 'waliKelas.user'])->findOrFail($kelasId);
+
+        // Ambil jadwal berdasarkan kelas dan mapel
+        $jadwal = Jadwal::where('kelas_id', $kelasId)
+            ->where('mapel_id', $mapelId)
+            ->with('mapel', 'guru.user')
+            ->firstOrFail();
+
+        // Ambil data presensi untuk jadwal dan tanggal tertentu
+        $presensis = Presensi::where('tanggal', $tanggal)
+            ->where('jadwal_id', $jadwal->id)
+            ->whereHas('siswa', function ($query) use ($kelasId) {
+                $query->where('kelas_id', $kelasId);
+            })
+            ->with('siswa.user')
+            ->get()
+            ->keyBy('siswa_id');
+
+        return view('admin.presensi.show', compact('kelas', 'jadwal', 'tanggal', 'presensis'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request)
     {
-        //
+        $request->validate([
+            'kelas_id' => 'required|exists:kelas,id',
+            'mapel_id' => 'required|exists:mapels,id',
+            'tanggal' => 'required|date',
+        ]);
+
+        $kelasId = $request->input('kelas_id');
+        $mapelId = $request->input('mapel_id');
+        $tanggal = $request->input('tanggal');
+
+        $kelas = Kelas::with(['siswas.user', 'waliKelas.user'])->findOrFail($kelasId);
+
+        // Ambil jadwal berdasarkan kelas dan mapel
+        $jadwal = Jadwal::where('kelas_id', $kelasId)
+            ->where('mapel_id', $mapelId)
+            ->with('mapel', 'guru.user')
+            ->firstOrFail();
+
+        // Ambil data presensi untuk jadwal dan tanggal tertentu
+        $presensis = Presensi::where('tanggal', $tanggal)
+            ->where('jadwal_id', $jadwal->id)
+            ->whereHas('siswa', function ($query) use ($kelasId) {
+                $query->where('kelas_id', $kelasId);
+            })
+            ->with('siswa.user')
+            ->get()
+            ->keyBy('siswa_id');
+
+        return view('admin.presensi.edit', compact('kelas', 'jadwal', 'tanggal', 'presensis'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            'kelas_id' => 'required|exists:kelas,id',
+            'mapel_id' => 'required|exists:mapels,id',
+            'tanggal' => 'required|date',
+            'status' => 'required|array',
+            'status.*' => 'required|in:Hadir,Izin,Sakit,Alpha',
+        ]);
+
+        $tanggal = $request->input('tanggal');
+        $kelasId = $request->input('kelas_id');
+        $mapelId = $request->input('mapel_id');
+
+        // Ambil jadwal_id berdasarkan kelas dan mapel
+        $jadwal = Jadwal::where('kelas_id', $kelasId)
+            ->where('mapel_id', $mapelId)
+            ->firstOrFail();
+
+        // Loop melalui setiap status siswa yang dikirim dari form
+        foreach ($request->status as $siswaId => $status) {
+            Presensi::updateOrCreate(
+                [
+                    'tanggal' => $tanggal,
+                    'siswa_id' => $siswaId,
+                    'jadwal_id' => $jadwal->id,
+                ],
+                [
+                    'status' => $status,
+                ]
+            );
+        }
+
+        return redirect()->route('admin.presensi.show', ['kelas_id' => $kelasId, 'mapel_id' => $mapelId, 'tanggal' => $tanggal])
+            ->with('success', 'Data presensi berhasil diperbarui.');
     }
 
     /**

@@ -60,8 +60,13 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $jadwal->guru->user->name }}</td>
 
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                            <a href="#" class="text-red-600 hover:text-red-900 ml-4">Hapus</a>
+                                            <a href="{{ route('admin.jadwal.edit', $jadwal) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                            <form method="POST" action="{{ route('admin.jadwal.destroy', $jadwal) }}" class="inline ml-4"
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus entri jadwal ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @empty

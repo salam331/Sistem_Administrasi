@@ -13,7 +13,11 @@
             <?php echo e(__('Input Presensi Kelas: ')); ?> <?php echo e($kelas->nama_kelas); ?>
 
         </h2>
+        <p class="text-sm text-gray-500">Mata Pelajaran: <?php echo e($jadwal->mapel->nama_mapel); ?></p>
         <p class="text-sm text-gray-500">Tanggal: <?php echo e(\Carbon\Carbon::parse($tanggal)->isoFormat('dddd, D MMMM Y')); ?></p>
+        <?php if($kelas->waliKelas): ?>
+            <p class="text-sm text-gray-500">Wali Kelas: <?php echo e($kelas->waliKelas->user->name); ?></p>
+        <?php endif; ?>
      <?php $__env->endSlot(); ?>
 
     <div class="py-12">
@@ -22,6 +26,7 @@
                 <form method="POST" action="<?php echo e(route('admin.presensi.store')); ?>">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="kelas_id" value="<?php echo e($kelas->id); ?>">
+                    <input type="hidden" name="mapel_id" value="<?php echo e($jadwal->mapel->id); ?>">
                     <input type="hidden" name="tanggal" value="<?php echo e($tanggal); ?>">
 
                     <div class="p-6 text-gray-900">

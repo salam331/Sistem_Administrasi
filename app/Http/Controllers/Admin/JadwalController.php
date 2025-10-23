@@ -73,24 +73,45 @@ class JadwalController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Jadwal $jadwal)
     {
-        //
+        // Ambil semua data master untuk dropdown
+        $kelases = Kelas::orderBy('nama_kelas')->get();
+        $mapels = Mapel::orderBy('nama_mapel')->get();
+        $gurus = Guru::with('user')->get()->sortBy('user.name'); // Urutkan berdasarkan nama user
+
+        return view('admin.jadwal.edit', compact('jadwal', 'kelases', 'mapels', 'gurus'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Jadwal $jadwal)
     {
-        //
+        // 1. Validasi
+        $request->validate([
+            'kelas_id' => 'required|exists:kelas,id',
+            'mapel_id' => 'required|exists:mapels,id',
+            'guru_id' => 'required|exists:gurus,id',
+            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+        ]);
+
+        // 2. Update data
+        $jadwal->update($request->all());
+
+        // 3. Redirect
+        return redirect()->route('admin.jadwal.index')->with('success', 'Entri jadwal berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Jadwal $jadwal)
     {
-        //
+        $jadwal->delete();
+
+        return redirect()->route('admin.jadwal.index')->with('success', 'Entri jadwal berhasil dihapus.');
     }
 }

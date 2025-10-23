@@ -32,14 +32,14 @@
     </style>
 </head>
 
-<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors">
+<body class="bg-blue-50 dark:bg-slate-900 text-blue-900 dark:text-white transition-colors">
 
     
-    <?php echo $__env->make('layouts.navigation', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php echo $__env->make('layouts.top-navbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <?php if(Auth::user()->hasRole('admin')): ?>
-        <?php echo $__env->make('layouts.navigation', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?> 
+        <?php echo $__env->make('layouts.admin-sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?> 
     <?php elseif(Auth::user()->hasRole('siswa')): ?>
-        <?php echo $__env->make('layouts.siswa-navigation', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?> 
+        <?php echo $__env->make('layouts.siswa-sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?> 
     <?php elseif(Auth::user()->hasRole('guru')): ?>
          
     <?php endif; ?>
@@ -96,4 +96,5 @@
     </script>
 </body>
 
-</html><?php /**PATH D:\laragon\www\sistem_administrasi\resources\views/layouts/app.blade.php ENDPATH**/ ?>
+</html>
+<?php /**PATH D:\laragon\www\sistem_administrasi\resources\views/layouts/app.blade.php ENDPATH**/ ?>
